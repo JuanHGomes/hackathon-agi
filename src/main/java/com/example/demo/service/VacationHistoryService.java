@@ -5,6 +5,7 @@ import com.example.demo.dto.response.VacationHistoryResponse;
 import com.example.demo.entity.Task;
 import com.example.demo.entity.User;
 import com.example.demo.entity.VacationHistory;
+import com.example.demo.enums.Status;
 import com.example.demo.mapper.VacationMapper;
 import com.example.demo.repository.VacationRepository;
 import lombok.RequiredArgsConstructor;
@@ -29,24 +30,30 @@ public class VacationHistoryService {
     private final UserService userService;
     private final VacationRepository vacationRepository;
 
-    public List<Task> newVacationHistory(VacationRequest request){
+    public List<Task> newVacationHistory(VacationRequest request) {
 
         User originUser = userService.findUserById(request.originUserId());
         User currentUser = userService.findUserById(request.currentUserId());
 
-        List<Task> emAndamentoTasks = taskService.listEmAndamentoTasks(request.currentUserId());
+        List<Task> emAndamentoTasks = taskService.listEmAndamentoTasks(request.originUserId());
 
-        emAndamentoTasks.forEach(task -> task.setUser(currentUser));
+        // Transfere as tarefas e salva as alterações
         emAndamentoTasks.forEach(task -> {
-            vacationRepository.save(new VacationHistory(originUser,
+            // Atualiza o dono da tarefa
+            task.setUser(currentUser);
+            taskService.saveTask(task);
+
+            // Cria registro de histórico de transferência
+            vacationRepository.save(new VacationHistory(
+                    originUser,
                     currentUser.getIdUser(),
                     task.getId(),
                     request.initDate(),
-                    request.endDate()));
+                    request.endDate()
+            ));
         });
 
         return emAndamentoTasks;
-
     }
 
     @Scheduled(cron = "* * * * * *")
@@ -58,29 +65,15 @@ public class VacationHistoryService {
         vacationRepository.findAllByEndDate(LocalDate.now())
                 .forEach(vacation -> {
 
+                   Task task = taskService.findTaskById(vacation.getTaskId());
 
-                    User originUser = vacation.getOriginUser();
-
-
-                    UUID currentUserId = vacation.getCurrentUserId();
-
-                    List<Task> emAndamentoTasks = taskService.listEmAndamentoTasks(currentUserId);
-
-                    if (!emAndamentoTasks.isEmpty()) {
-                        log.info("Reatribuindo {} tarefas do usuário ID {} para o usuário ID {}",
-                                emAndamentoTasks.size(), currentUserId, originUser.getIdUser());
-
-                        emAndamentoTasks.forEach(task -> {
-                            task.setUser(originUser);
-
+                        if(task.getStatus() == Status.EM_ANDAMENTO){
+                            task.setUser(vacation.getOriginUser());
                             taskService.saveTask(task);
-                        });
-                    } else {
-                        log.info("Nenhuma tarefa em andamento encontrada para reatribuição do usuário ID {}", currentUserId);
-                    }
-                });
+                        }
+                    });
 
-        log.info("Reatribuição de tarefas concluída.");
+
     }
 
 //    public List<Task> findVacatioHistoryByUser(UUID userId){

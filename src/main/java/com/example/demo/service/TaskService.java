@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import java.util.UUID;
@@ -92,12 +93,6 @@ public class TaskService {
     public List<Task> listEmAndamentoTasks(UUID userId){
         return taskRepository.buscarTasksPorUsuarioEStatus(userId, Status.EM_ANDAMENTO);
     }
-
-//    public List<Task> getUserTaskHistory(UUID userId) {
-//        return taskRepository.findTaskHistoryByUser(userId);
-//    }
-
-
 
     public void saveTask(Task task) {
         taskRepository.save(task);

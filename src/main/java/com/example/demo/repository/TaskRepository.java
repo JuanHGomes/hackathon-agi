@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public interface TaskRepository extends JpaRepository<Task, Long> {
@@ -16,6 +17,8 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
 
     List<Task> findByUser_IdUser(UUID idUser);
 
-//    List<Task> findTaskHistoryByUser(UUID userId);
+    @Override
+    Optional<Task> findById(Long Long);
+
 
 }

@@ -3,8 +3,6 @@ package com.example.demo.controller;
 
 import com.example.demo.dto.request.TaskRequest;
 import com.example.demo.dto.response.TaskResponse;
-import com.example.demo.entity.Task;
-import com.example.demo.enums.Status;
 import com.example.demo.mapper.TaskMapper;
 import com.example.demo.service.TaskService;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +26,7 @@ public class TaskController {
     }
 
     @PostMapping("/setUser/{idUser}/{idTask}")
-    public ResponseEntity<TaskResponse> createTask (@PathVariable UUID idUser, @PathVariable Long idTask){
+    public ResponseEntity<TaskResponse> setUser(@PathVariable UUID idUser, @PathVariable Long idTask){
 
         return ResponseEntity.ok(TaskMapper.toResponse(taskService.setTaskUser(idTask, idUser)));
     }
