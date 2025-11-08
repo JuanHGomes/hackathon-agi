@@ -7,7 +7,7 @@ import java.util.UUID;
 public record VacationRequest(
         UUID originUserId,
         UUID currentUserId,
-        LocalDateTime initDate,
-        LocalDateTime endDate
+        LocalDate initDate,
+        LocalDate endDate
 ) {
 }

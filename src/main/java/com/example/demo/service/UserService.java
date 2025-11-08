@@ -37,8 +37,11 @@ public class UserService {
         }
     }
 
-    @Transactional
-    public Re
+    public User findUserById(UUID id){
+
+        return userRepository.findById(id).orElseThrow();
+
+    }
 
 
 

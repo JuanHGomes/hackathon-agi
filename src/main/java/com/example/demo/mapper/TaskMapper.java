@@ -12,7 +12,6 @@ public class TaskMapper {
                 .title(request.title())
                 .description(request.description())
                 .status(Status.PENDENTE)
-                .id(request.userId())
                 .build();
     }
 
