@@ -46,6 +46,7 @@ public class SecurityConfig {
                         .requestMatchers("task/historico/**").permitAll()
                         .requestMatchers("task/listByUser/**").permitAll()
                         .requestMatchers("task/chanceStatus/**").permitAll()
+                        .requestMatchers("/api/vacations/transfers").permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
