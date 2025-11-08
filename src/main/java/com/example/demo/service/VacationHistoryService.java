@@ -17,6 +17,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class VacationHistoryService {
 
+    private final String SCHEDULED_CHANGE_USER_OF_ENDED_VACATION = "0 0 0 * * ?";
+
     private final TaskService taskService;
     private final UserService userService;
     private final VacationRepository vacationRepository;
@@ -36,10 +38,14 @@ public class VacationHistoryService {
 
     }
 
-    @Scheduled(cron = "0 0 0 * * ?")
+    @Scheduled(cron = SCHEDULED_CHANGE_USER_OF_ENDED_VACATION)
     public void changeUserOfEndedVacation(){
 
-        vacationRepository.findAllByEndDate(LocalDate.now());
+        vacationRepository.findAllByEndDate(LocalDate.now())
+                .stream().forEach(vacation -> taskService
+                        .findTaskById(vacation.getTaskId())
+                        .setUser(userService.findUserById(vacation.getOriginUser().getIdUser())));
+
     }
 
 }
