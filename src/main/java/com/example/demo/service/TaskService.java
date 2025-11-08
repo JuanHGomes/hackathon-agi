@@ -4,6 +4,7 @@ import com.example.demo.dto.request.TaskRequest;
 import com.example.demo.dto.response.TaskResponse;
 
 import com.example.demo.entity.Task;
+import com.example.demo.entity.User;
 import com.example.demo.enums.Status;
 import com.example.demo.mapper.TaskMapper;
 import com.example.demo.repository.TaskRepository;
@@ -11,11 +12,14 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @Service
 @RequiredArgsConstructor
 public class TaskService {
 
     private final TaskRepository taskRepository;
+    private final UserService userService;
 
     public TaskResponse create(TaskRequest request){
 
@@ -24,6 +28,32 @@ public class TaskService {
         taskRepository.save(newTask);
 
         return TaskMapper.toResponse(newTask);
+
+    }
+
+    public TaskResponse changeStatus(Long id, Status status){
+
+        Task task = findTaskById(id);
+
+        task.setStatus(status);
+
+       return TaskMapper.toResponse(taskRepository.save(task));
+
+    }
+
+    public TaskResponse takeTask(Long taskId, UUID userID){
+        Task task = findTaskById(taskId);
+
+        User user = userService.findById(userID); //CAROL CRIA ESSE METODO EM NOME DE JESUS
+
+        task.setUser(user);
+
+        return TaskMapper.toResponse(taskRepository.save(task));
+    }
+
+    public Task findTaskById(Long id){
+
+        return taskRepository.findById(id).orElseThrow(RuntimeException::new);
 
     }
 }
