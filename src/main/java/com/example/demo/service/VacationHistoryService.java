@@ -27,7 +27,7 @@ public class VacationHistoryService {
 
     return VacationHistory.builder()
             .originUser(userService.findUserById(request.currentUserId())
-            .build()
+            .build(),
 
     }
 }
