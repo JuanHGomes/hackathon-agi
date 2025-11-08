@@ -14,6 +14,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.UUID;
 
 @RequiredArgsConstructor
@@ -72,6 +73,18 @@ public class UserService {
         } catch (Exception e){
             throw new RuntimeException("Erro interno ao buscar o usuário!", e);
         }
+    }
+
+    public List<RegisterResponse> findAllUsers(){
+
+        try{
+            return userRepository.findAll().stream()
+                    .map(registerMapper::toResponseDTO)
+                    .toList();
+        }catch (Exception e){
+            throw new RuntimeException("Erro interno ao listar usuário!", e);
+        }
+
     }
 
 
