@@ -6,7 +6,6 @@ import java.util.UUID;
 
 public record TaskRequest(
 @NotEmpty String title,
-String description,
-UUID userId
+String description
 ) {
 }

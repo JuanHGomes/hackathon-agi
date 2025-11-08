@@ -23,10 +23,6 @@ public class User {
     @Column(name = "id_user")
     private UUID idUser;
 
-    @EqualsAndHashCode.Include
-    @Column(unique = true, nullable = false)
-    private UUID uuid;
-
     @Column(nullable = false)
     @ToString.Include
     private String name;
@@ -47,28 +43,22 @@ public class User {
     @OneToMany(mappedBy = "originUser", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Task> tasksCreated = new HashSet<>();
 
-    // Usuário responsável atual dessas tarefas
-    @OneToMany(mappedBy = "currentUser", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Task> tasksResponsible = new HashSet<>();
+//    // Usuário responsável atual dessas tarefas
+//    @OneToMany(mappedBy = "currentUser", cascade = CascadeType.ALL, orphanRemoval = true)
+//    private Set<Task> tasksResponsible = new HashSet<>();
 
     // Histórico de férias onde ele é o originador
     @OneToMany(mappedBy = "originUser", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<VacationHistory> vacationsOrigin = new HashSet<>();
 
-    // Histórico de férias onde ele é o atual responsável
-    @OneToMany(mappedBy = "currentUser", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<VacationHistory> vacationsCurrent = new HashSet<>();
+//    // Histórico de férias onde ele é o atual responsável
+//    @OneToMany(mappedBy = "currentUser", cascade = CascadeType.ALL, orphanRemoval = true)
+//    private Set<VacationHistory> vacationsCurrent = new HashSet<>();
 
-    @OneToMany(mappedBy = "currentUser", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    @ToString.Exclude
-    private final Set<Task> tasks = new HashSet<>();
+//    @OneToMany(mappedBy = "currentUser", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+//    @ToString.Exclude
+//    private final Set<Task> tasks = new HashSet<>();
 
-    @PrePersist
-    public void prePersist(){
-        if (uuid == null) {
-            uuid = UUID.randomUUID();
-        }
-    }
 
     public void setName(String name) {
         this.name = name;

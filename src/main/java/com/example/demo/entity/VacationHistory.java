@@ -18,17 +18,13 @@ public class VacationHistory {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-
     @ManyToOne
     @JoinColumn(name = "originUserId")
     private User originUser;
 
-
-
     @ManyToOne
     @JoinColumn(name = "currentUserId")
     private User currentUser;
-
 
     @ManyToOne
     @JoinColumn(name = "taskId")

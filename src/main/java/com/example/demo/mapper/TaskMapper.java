@@ -3,14 +3,16 @@ package com.example.demo.mapper;
 import com.example.demo.dto.request.TaskRequest;
 import com.example.demo.dto.response.TaskResponse;
 import com.example.demo.entity.Task;
+import com.example.demo.entity.User;
 import com.example.demo.enums.Status;
 
 public class TaskMapper {
 
-    public static Task map(final TaskRequest request){
+    public static Task map(final TaskRequest request, User originUser){
         return Task.builder()
                 .title(request.title())
                 .description(request.description())
+                .originUser(originUser)
                 .status(Status.PENDENTE)
                 .build();
     }

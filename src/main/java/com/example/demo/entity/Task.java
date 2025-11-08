@@ -31,13 +31,4 @@ public class Task {
     @JoinColumn(name = "originUserId")
     private User originUser;
 
-    @ManyToOne
-    @JoinColumn(name = "currentUserId")
-    private User currentUser;
-
-    @OneToMany(mappedBy = "task", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<VacationHistory> vacationHistories = new HashSet<>();
-
-    @Column(nullable = false, columnDefinition = "boolean default false")
-    private boolean deleted = false;
 }

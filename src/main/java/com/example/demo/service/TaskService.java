@@ -26,33 +26,25 @@ public class TaskService {
     private final TaskRepository taskRepository;
     private final UserService userService;
 
-    public TaskResponse create(TaskRequest request) {
+    public Task create(TaskRequest request) {
 
-        User user = userService.findUserById(request.userId());
-
-        if(user.getType() == Type.MANAGER){
-
-            Task newTask = TaskMapper.map(request);
-
-            taskRepository.save(newTask);
-
-            return TaskMapper.toResponse(newTask);
-
-        }
-
-        return null;
+            return taskRepository.save(Task.builder()
+                    .title(request.title())
+                    .description(request.description())
+                    .status(Status.PENDENTE)
+                    .build());
 
     }
 
 
-    public void deleteTask(Long id){
-        Task task = taskRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Tarefa não encontrada"));
-
-        task.setDeleted(true);
-
-        taskRepository.save(task);
-    }
+//    public void deleteTask(Long id){
+//        Task task = taskRepository.findById(id)
+//                .orElseThrow(() -> new RuntimeException("Tarefa não encontrada"));
+//
+//        task.setDeleted(true);
+//
+//        taskRepository.save(task);
+//    }
 
     public TaskResponse changeStatus(Long id, Status status){
 
@@ -64,14 +56,14 @@ public class TaskService {
 
     }
 
-    public TaskResponse setTasUser(Long taskId, UUID userID){
+    public Task setTaskUser(Long taskId, UUID userID){
         Task task = findTaskById(taskId);
 
-        User user = userService.findUserById(userID); //CAROL CRIA ESSE METODO EM NOME DE JESUS
+        User user = userService.findUserById(userID);
 
-        task.setCurrentUser(user);
+        task.setOriginUser(user);
 
-        return TaskMapper.toResponse(taskRepository.save(task));
+        return taskRepository.save(task);
     }
 
     public Task findTaskById(Long id){
@@ -80,29 +72,25 @@ public class TaskService {
 
     }
 
-    public List<TaskResponse> listAll(){
-        List<Task> tasks = taskRepository.findByDeletedFalse();
-        return tasks.stream()
-                .map(TaskMapper::toResponse)
-                .collect(Collectors.toList());
+    public List<Task> listAll(){
+
+        return taskRepository.findAll();
     }
 
 
-    public List<TaskResponse> listByUser(UUID userId){
-        List<Task> tasks = taskRepository.findByCurrentUser_IdUser(userId);
-        return tasks.stream()
-                .map(TaskMapper::toResponse)
-                .collect(Collectors.toList());
+    public List<Task> listByUser(UUID userId){
+
+        return taskRepository.findByOriginUser_IdUser(userId);
     }
 
-    public List<Task> listByUserAndStatusPending(UUID userId){
-
-        List<Task> tasks = taskRepository.findByCurrentUser_IdUser(userId);
-
-        return tasks.stream()
-                .filter(taskResponse -> taskResponse.getStatus() == Status.PENDENTE)
-                .collect(Collectors.toList());
-    }
+//    public List<Task> listByUserAndStatusPending(UUID userId){
+//
+//        List<Task> tasks = taskRepository.findByCurrentUser_IdUser(userId);
+//
+//        return tasks.stream()
+//                .filter(taskResponse -> taskResponse.getStatus() == Status.PENDENTE)
+//                .collect(Collectors.toList());
+//    }
 
 
 }

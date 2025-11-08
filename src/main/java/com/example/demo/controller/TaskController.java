@@ -7,10 +7,10 @@ import com.example.demo.entity.Task;
 import com.example.demo.service.TaskService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/tasks")
@@ -20,9 +20,29 @@ public class TaskController {
     public final TaskService taskService;
 
     @PostMapping("/create")
-    public ResponseEntity<TaskResponse> createTask (@RequestBody TaskRequest taskRequest){
-        TaskResponse newTask = taskService.create(taskRequest);
+    public ResponseEntity<Task> createTask (@RequestBody TaskRequest taskRequest){
+        Task newTask = taskService.create(taskRequest);
 
         return ResponseEntity.ok(newTask);
     }
+
+    @PostMapping("/setUser/{idUser}/{idTask}")
+    public ResponseEntity<Task> createTask (@PathVariable UUID idUser, @PathVariable Long idTask){
+
+        return ResponseEntity.ok(taskService.setTaskUser(idTask, idUser));
+    }
+
+    @GetMapping()
+    public List<Task> listTasks(){
+        return taskService.listAll();
+    }
+
+    @GetMapping("/listByUser/{userId}")
+    public List<Task> listTasks(@PathVariable UUID userId){
+        return taskService.listByUser(userId);
+    }
+
+
+
+
 }
