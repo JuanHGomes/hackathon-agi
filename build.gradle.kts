@@ -35,6 +35,13 @@ dependencies {
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 	implementation("org.springframework.security:spring-security-crypto")
+
+	// Security
+	implementation ("org.springframework.boot:spring-boot-starter-security")
+	testImplementation ("org.springframework.security:spring-security-test")
+
+	// Token
+	implementation ("com.auth0:java-jwt:4.4.0'")
 }
 
 tasks.withType<Test> {
