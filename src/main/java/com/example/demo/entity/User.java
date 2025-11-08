@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -42,7 +43,23 @@ public class User {
     @ToString.Include
     private Type type;
 
-    @OneToMany(mappedBy = "users", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    // Usuário criou essas tarefas
+    @OneToMany(mappedBy = "originUser", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Task> tasksCreated = new HashSet<>();
+
+    // Usuário responsável atual dessas tarefas
+    @OneToMany(mappedBy = "currentUser", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Task> tasksResponsible = new HashSet<>();
+
+    // Histórico de férias onde ele é o originador
+    @OneToMany(mappedBy = "originUser", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<VacationHistory> vacationsOrigin = new HashSet<>();
+
+    // Histórico de férias onde ele é o atual responsável
+    @OneToMany(mappedBy = "currentUser", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<VacationHistory> vacationsCurrent = new HashSet<>();
+
+    @OneToMany(mappedBy = "currentUser", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @ToString.Exclude
     private final Set<Task> tasks = new HashSet<>();
 

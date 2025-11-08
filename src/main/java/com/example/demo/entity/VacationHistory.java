@@ -18,16 +18,18 @@ public class VacationHistory {
     private Long id;
 
 
-    @OneToMany
+    @ManyToOne
     @JoinColumn(name = "originUserId")
     private User originUser;
 
 
-    @OneToMany
+
+    @ManyToOne
     @JoinColumn(name = "currentUserId")
     private User currentUser;
 
-    @OneToMany
+
+    @ManyToOne
     @JoinColumn(name = "taskId")
     private Task task;
 

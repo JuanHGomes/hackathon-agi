@@ -4,6 +4,9 @@ import com.example.demo.enums.Status;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
 @Table(name="tb_task")
 @Getter
@@ -31,6 +34,9 @@ public class Task {
     @ManyToOne
     @JoinColumn(name = "currentUserId")
     private User currentUser;
+
+    @OneToMany(mappedBy = "task", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<VacationHistory> vacationHistories = new HashSet<>();
 
     @Column(nullable = false, columnDefinition = "boolean default false")
     private boolean deleted = false;
