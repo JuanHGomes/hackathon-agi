@@ -89,7 +89,7 @@ public class TaskService {
 
 
     public List<TaskResponse> listByUser(UUID userId){
-        List<Task> tasks = taskRepository.findByUser_IdUser(userId);
+        List<Task> tasks = taskRepository.findByCurrentUser_IdUser(userId);
         return tasks.stream()
                 .map(TaskMapper::toResponse)
                 .collect(Collectors.toList());
@@ -97,7 +97,7 @@ public class TaskService {
 
     public List<Task> listByUserAndStatusPending(UUID userId){
 
-        List<Task> tasks = taskRepository.findByUser_IdUser(userId);
+        List<Task> tasks = taskRepository.findByCurrentUser_IdUser(userId);
 
         return tasks.stream()
                 .filter(taskResponse -> taskResponse.getStatus() == Status.PENDENTE)
