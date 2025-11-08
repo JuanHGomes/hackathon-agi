@@ -1,5 +1,6 @@
 package com.example.demo.config;
 
+import com.example.demo.entity.User;
 import com.example.demo.repository.UserRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.Optional; // Importação necessária se ainda não estiver presente
 
 @Component
 @RequiredArgsConstructor
@@ -26,13 +28,19 @@ public class SecurityFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         var token = this.recoverToken(request);
 
-        if(token != null){
+        if (token != null) {
             var email = tokenService.validateToken(token);
-            UserDetails user = userRepository.findUserByEmail(email).orElseThrow();
 
-            var authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-        }filterChain.doFilter(request, response);
+            Optional<User> userOptional = userRepository.findUserByEmail(email);
+
+            if (userOptional.isPresent()) {
+                User user = userOptional.get();
+                var authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+            }
+        }
+
+        filterChain.doFilter(request, response);
     }
 
     private String recoverToken(HttpServletRequest request){
