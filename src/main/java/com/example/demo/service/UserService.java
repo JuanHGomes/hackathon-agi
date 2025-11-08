@@ -3,14 +3,13 @@ package com.example.demo.service;
 import com.example.demo.dto.request.RegisterRequest;
 import com.example.demo.dto.response.RegisterResponse;
 import com.example.demo.entity.User;
-import com.example.demo.enums.Type;
 import com.example.demo.exception.BusinessException;
 import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.mapper.RegisterMapper;
 import com.example.demo.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -50,7 +49,7 @@ public class UserService {
              checkEmailUnique(registerRequest.email());
 
              User newUser = registerMapper.toEntity(registerRequest);
-
+            newUser.setPassword(passwordEncoder.encode(registerRequest.password()));
              User userSave = userRepository.save(newUser);
 
             return registerMapper.toResponseDTO(userSave);

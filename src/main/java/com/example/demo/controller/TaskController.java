@@ -28,9 +28,9 @@ public class TaskController {
     }
 
     @PostMapping("/setUser/{idUser}/{idTask}")
-    public ResponseEntity<TaskResponse> createTask (@PathVariable UUID idUser, @PathVariable Long idTask){
+    public ResponseEntity<Task> createTask (@PathVariable UUID idUser, @PathVariable Long idTask){
 
-        return ResponseEntity.ok(TaskMapper.toResponse(taskService.setTaskUser(idTask, idUser)));
+        return ResponseEntity.ok(taskService.setTaskUser(idTask, idUser));
     }
 
     @GetMapping()

@@ -1,13 +1,13 @@
 package com.example.demo.entity;
 
-import com.example.demo.enums.Type;
+import com.example.demo.enums.Role;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 @Entity
 @Table(name = "user")
@@ -16,7 +16,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @ToString(onlyExplicitlyIncluded = true)
-public class User {
+public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -36,11 +36,29 @@ public class User {
     private String password;
 
     @Column(nullable = false)
-    @ToString.Include
-    private Type type;
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Task> taskList;
+    // Usuário criou essas tarefas
+    @OneToMany(mappedBy = "originUser", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Task> tasksCreated = new HashSet<>();
+
+//    // Usuário responsável atual dessas tarefas
+//    @OneToMany(mappedBy = "currentUser", cascade = CascadeType.ALL, orphanRemoval = true)
+//    private Set<Task> tasksResponsible = new HashSet<>();
+
+    // Histórico de férias onde ele é o originador
+    @OneToMany(mappedBy = "originUser", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<VacationHistory> vacationsOrigin = new HashSet<>();
+
+//    // Histórico de férias onde ele é o atual responsável
+//    @OneToMany(mappedBy = "currentUser", cascade = CascadeType.ALL, orphanRemoval = true)
+//    private Set<VacationHistory> vacationsCurrent = new HashSet<>();
+
+//    @OneToMany(mappedBy = "currentUser", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+//    @ToString.Exclude
+//    private final Set<Task> tasks = new HashSet<>();
+
 
     public void setName(String name) {
         this.name = name;
@@ -54,9 +72,18 @@ public class User {
         this.password = password;
     }
 
-    public void setType(Type type) {
-        this.type = type;
+    public void setRole(Role role) {
+        this.role = role;
     }
 
 
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return role == null ? List.of() : List.of(new SimpleGrantedAuthority(role.name()));
+    }
+
+    @Override
+    public String getUsername() {
+        return this.email;
+    }
 }
