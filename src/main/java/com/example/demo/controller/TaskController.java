@@ -38,6 +38,11 @@ public class TaskController {
         return taskService.listAll().stream().map(TaskMapper::toResponse).toList();
     }
 
+    @GetMapping("/historico/{userId}")
+    public List<Task> getUserTaskHistory(@PathVariable UUID userId) {
+        return taskService.getUserTaskHistory(userId);
+    }
+
 
     @GetMapping("/listByUserAndStatus/{userId}")
     public List<TaskResponse> listByUserAndStatus(@PathVariable UUID userId){

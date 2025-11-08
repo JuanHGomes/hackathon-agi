@@ -4,6 +4,7 @@ import com.example.demo.enums.Status;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -27,10 +28,22 @@ public class Task {
     @Enumerated(EnumType.STRING)
     private Status status;
 
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+
     @ManyToOne
     @JoinColumn(name = "userId")
     private User user;
 
+    @PrePersist
+    public void prePersist(){
+        this.createdAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    public void preUpdate(){
+        this.updatedAt = LocalDateTime.now();
+    }
 
 
 }
