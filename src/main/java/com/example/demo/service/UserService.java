@@ -62,11 +62,10 @@ public class UserService {
     }
 
 
-    public RegisterResponse findUserById(UUID idUser){
+    public User findUserById(UUID idUser){
         try{
-            User user = findUserOrThrow(idUser);
 
-            return registerMapper.toResponseDTO(user);
+            return findUserOrThrow(idUser);
         } catch (ResourceNotFoundException e){
             throw e;
         } catch (Exception e){

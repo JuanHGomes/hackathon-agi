@@ -8,11 +8,11 @@ import com.example.demo.enums.Status;
 
 public class TaskMapper {
 
-    public static Task map(final TaskRequest request, User originUser){
+    public static Task map(final TaskRequest request, User user){
         return Task.builder()
                 .title(request.title())
                 .description(request.description())
-                .originUser(originUser)
+                .user(user)
                 .status(Status.PENDENTE)
                 .build();
     }
@@ -23,7 +23,16 @@ public class TaskMapper {
                 task.getTitle(),
                 task.getDescription(),
                 task.getStatus(),
-                task.getOriginUser().getIdUser()
+                task.getUser().getIdUser()
         );
+    }
+
+    public static TaskResponse toCreateTaskResponse(final Task task){
+        return TaskResponse.builder()
+                .id(task.getId())
+                .title(task.getTitle())
+                .description(task.getDescription())
+                .status(task.getStatus())
+                .build();
     }
 }

@@ -28,7 +28,7 @@ public class Task {
     private Status status;
 
     @ManyToOne
-    @JoinColumn(name = "originUserId")
-    private User originUser;
+    @JoinColumn(name = "userId")
+    private User user;
 
 }

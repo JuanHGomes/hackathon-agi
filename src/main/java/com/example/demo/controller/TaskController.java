@@ -4,6 +4,7 @@ package com.example.demo.controller;
 import com.example.demo.dto.request.TaskRequest;
 import com.example.demo.dto.response.TaskResponse;
 import com.example.demo.entity.Task;
+import com.example.demo.mapper.TaskMapper;
 import com.example.demo.service.TaskService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -20,27 +21,29 @@ public class TaskController {
     public final TaskService taskService;
 
     @PostMapping("/create")
-    public ResponseEntity<Task> createTask (@RequestBody TaskRequest taskRequest){
-        Task newTask = taskService.create(taskRequest);
+    public ResponseEntity<TaskResponse> createTask (@RequestBody TaskRequest taskRequest){
 
-        return ResponseEntity.ok(newTask);
+        return ResponseEntity.ok(TaskMapper.toResponse(taskService.create(taskRequest)));
     }
 
     @PostMapping("/setUser/{idUser}/{idTask}")
-    public ResponseEntity<Task> createTask (@PathVariable UUID idUser, @PathVariable Long idTask){
+    public ResponseEntity<TaskResponse> createTask (@PathVariable UUID idUser, @PathVariable Long idTask){
 
-        return ResponseEntity.ok(taskService.setTaskUser(idTask, idUser));
+        return ResponseEntity.ok(TaskMapper.toResponse(taskService.setTaskUser(idTask, idUser)));
     }
 
     @GetMapping()
-    public List<Task> listTasks(){
-        return taskService.listAll();
+    public List<TaskResponse> listTasks(){
+        return taskService.listAll().stream().map(TaskMapper::toResponse).toList();
     }
 
-    @GetMapping("/listByUser/{userId}")
-    public List<Task> listTasks(@PathVariable UUID userId){
-        return taskService.listByUser(userId);
+
+    @GetMapping("/listByUserAndStatus/{userId}")
+    public List<TaskResponse> listByUserAndStatus(@PathVariable UUID userId){
+        return taskService.listByUserAndStatusPending(userId).stream().map(TaskMapper::toResponse).toList();
     }
+
+
 
 
 
