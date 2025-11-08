@@ -50,8 +50,7 @@ public class UserService {
 
              User userSave = userRepository.save(newUser);
 
-            RegisterResponse response = registerMapper.toResponseDTO(userSave);
-            return response;
+            return registerMapper.toResponseDTO(userSave);
 
         } catch (BusinessException e) {
             throw e;
@@ -59,6 +58,8 @@ public class UserService {
             throw new RuntimeException("Erro interno ao criar usuário", e);
         }
     }
+
+
 
 
 
