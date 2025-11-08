@@ -18,7 +18,7 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "id_usuer")
+    @Column(name = "id_user")
     private UUID idUser;
 
     @EqualsAndHashCode.Include

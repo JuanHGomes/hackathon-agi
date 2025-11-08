@@ -22,7 +22,7 @@ public class TaskMapper {
                 task.getTitle(),
                 task.getDescription(),
                 task.getStatus(),
-                task.getUser().getId()
+                task.getUser().getIdUser()
         );
     }
 }
