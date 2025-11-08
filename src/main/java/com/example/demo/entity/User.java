@@ -39,26 +39,8 @@ public class User {
     @ToString.Include
     private Type type;
 
-    // Usuário criou essas tarefas
-    @OneToMany(mappedBy = "originUser", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Task> tasksCreated = new HashSet<>();
-
-//    // Usuário responsável atual dessas tarefas
-//    @OneToMany(mappedBy = "currentUser", cascade = CascadeType.ALL, orphanRemoval = true)
-//    private Set<Task> tasksResponsible = new HashSet<>();
-
-    // Histórico de férias onde ele é o originador
-    @OneToMany(mappedBy = "originUser", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<VacationHistory> vacationsOrigin = new HashSet<>();
-
-//    // Histórico de férias onde ele é o atual responsável
-//    @OneToMany(mappedBy = "currentUser", cascade = CascadeType.ALL, orphanRemoval = true)
-//    private Set<VacationHistory> vacationsCurrent = new HashSet<>();
-
-//    @OneToMany(mappedBy = "currentUser", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-//    @ToString.Exclude
-//    private final Set<Task> tasks = new HashSet<>();
-
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Task> taskList;
 
     public void setName(String name) {
         this.name = name;

@@ -27,18 +27,18 @@ public class UserService {
 
     private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-    private User findUserOrThrow(UUID idUser) {
+    private User findUserOrThrow(UUID idUser){
         return userRepository.findById(idUser)
                 .orElseThrow(() -> {
                     return new ResourceNotFoundException("O usuário de ID: " + idUser + " não foi encontrado!");
                 });
     }
 
-    private void checkEmailUnique(String email) {
+    private void checkEmailUnique(String email){
 
         boolean emailExists = userRepository.findAll().stream()
                 .anyMatch(user -> user.getEmail().equals(email));
-        if (emailExists) {
+        if (emailExists){
             throw new BusinessException("Email " + email + " já está em uso");
         }
     }
@@ -46,52 +46,45 @@ public class UserService {
     @Transactional
     public RegisterResponse createUser(RegisterRequest registerRequest) {
 
-        try {
-            checkEmailUnique(registerRequest.email());
+        try{
+             checkEmailUnique(registerRequest.email());
 
-            User newUser = registerMapper.toEntity(registerRequest);
+             User newUser = registerMapper.toEntity(registerRequest);
 
-            User userSave = userRepository.save(newUser);
+             User userSave = userRepository.save(newUser);
 
             return registerMapper.toResponseDTO(userSave);
 
         } catch (BusinessException e) {
             throw e;
-        } catch (Exception e) {
+        }catch (Exception e){
             throw new RuntimeException("Erro interno ao criar usuário", e);
         }
     }
 
 
-    public RegisterResponse findUserById(UUID idUser) {
-        try {
-            User user = findUserOrThrow(idUser);
+    public User findUserById(UUID idUser){
+        try{
 
-            return registerMapper.toResponseDTO(user);
-        } catch (ResourceNotFoundException e) {
+            return findUserOrThrow(idUser);
+        } catch (ResourceNotFoundException e){
             throw e;
-        } catch (Exception e) {
+        } catch (Exception e){
             throw new RuntimeException("Erro interno ao buscar o usuário!", e);
         }
     }
 
-    public List<RegisterResponse> findAllUsers(User loggedUser) {
+    public List<RegisterResponse> findAllUsers(){
 
-        try {
-
-            if (loggedUser.getType() != Type.ADMIN && loggedUser.getType() != Type.MANAGER) {
-                throw new BusinessException("Acesso negado: apenas ADMIN e Gestores podem listar todos os usuários!");
-            }
-
+        try{
             return userRepository.findAll().stream()
-                    .map(registerMapper::toResponseDTO)
+                    .map(RegisterMapper::toResponseDTO)
                     .toList();
-        } catch (Exception e) {
+        }catch (Exception e){
             throw new RuntimeException("Erro interno ao listar usuário!", e);
-
-
         }
 
-
     }
+
+
 }

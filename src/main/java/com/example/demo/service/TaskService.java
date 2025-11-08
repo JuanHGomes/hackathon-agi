@@ -26,7 +26,6 @@ import java.util.UUID;
 public class TaskService {
 
     private final TaskRepository taskRepository;
-    private final User user;
     private final UserService userService;
 
     public Task create(TaskRequest request) {
@@ -49,13 +48,13 @@ public class TaskService {
 //        taskRepository.save(task);
 //    }
 
-    public TaskResponse changeStatus(Long id, Status status){
+    public Task changeStatus(Long id, String status){
 
         Task task = findTaskById(id);
 
-        task.setStatus(status);
+        task.setStatus(Status.valueOf(status.toUpperCase()));
 
-       return TaskMapper.toResponse(taskRepository.save(task));
+       return taskRepository.save(task);
 
     }
 
@@ -64,7 +63,7 @@ public class TaskService {
 
         User user = userService.findUserById(userID);
 
-        task.setOriginUser(user);
+        task.setUser(user);
 
         return taskRepository.save(task);
     }
@@ -83,17 +82,17 @@ public class TaskService {
 
     public List<Task> listByUser(UUID userId){
 
-        return taskRepository.findByOriginUser_IdUser(userId);
+        return taskRepository.findByUser_IdUser(userId);
     }
 
-//    public List<Task> listByUserAndStatusPending(UUID userId){
-//
-//        List<Task> tasks = taskRepository.findByCurrentUser_IdUser(userId);
-//
-//        return tasks.stream()
-//                .filter(taskResponse -> taskResponse.getStatus() == Status.PENDENTE)
-//                .collect(Collectors.toList());
-//    }
+    public List<Task> listByUserAndStatusPending(UUID userId){
+
+        List<Task> tasks = listByUser(userId);
+
+        return tasks.stream()
+                .filter(taskResponse -> taskResponse.getStatus() == Status.PENDENTE)
+                .collect(Collectors.toList());
+    }
 
 
 }

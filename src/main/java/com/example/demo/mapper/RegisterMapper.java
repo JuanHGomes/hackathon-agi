@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class RegisterMapper {
 
-    public RegisterResponse toResponseDTO(User user){
+    public static RegisterResponse toResponseDTO(User user){
         return new RegisterResponse(
                 user.getIdUser(),
                 user.getName(),
@@ -17,7 +17,7 @@ public class RegisterMapper {
         );
     }
 
-    public User toEntity(RegisterRequest registerRequest){
+    public static User toEntity(RegisterRequest registerRequest){
         User user = new User();
         user.setName(registerRequest.name());
         user.setEmail(registerRequest.email());
