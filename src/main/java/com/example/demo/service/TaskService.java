@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 import com.example.demo.dto.request.TaskRequest;
+import com.example.demo.dto.response.RegisterResponse;
 import com.example.demo.dto.response.TaskResponse;
 
 import com.example.demo.entity.Task;
@@ -11,6 +12,7 @@ import com.example.demo.mapper.TaskMapper;
 import com.example.demo.repository.TaskRepository;
 import lombok.RequiredArgsConstructor;
 
+import org.hibernate.query.sql.internal.ParameterRecognizerImpl;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,6 +26,7 @@ import java.util.UUID;
 public class TaskService {
 
     private final TaskRepository taskRepository;
+    private final User user;
     private final UserService userService;
 
     public Task create(TaskRequest request) {
