@@ -3,6 +3,7 @@ package com.example.demo.controller;
 import com.example.demo.dto.request.RegisterRequest;
 import com.example.demo.dto.response.RegisterResponse;
 import com.example.demo.entity.User;
+import com.example.demo.mapper.RegisterMapper;
 import com.example.demo.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +32,7 @@ public class UserController {
     @GetMapping("/{id}")
     public ResponseEntity<RegisterResponse> findUserById(@PathVariable UUID idUser){
 
-        RegisterResponse response = userService.findUserById(idUser);
+        RegisterResponse response = RegisterMapper.toResponseDTO(userService.findUserById(idUser));
 
         return ResponseEntity.ok(response);
     }

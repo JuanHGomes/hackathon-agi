@@ -48,11 +48,11 @@ public class TaskService {
 //        taskRepository.save(task);
 //    }
 
-    public Task changeStatus(Long id, Status status){
+    public Task changeStatus(Long id, String status){
 
         Task task = findTaskById(id);
 
-        task.setStatus(status);
+        task.setStatus(Status.valueOf(status.toUpperCase()));
 
        return taskRepository.save(task);
 

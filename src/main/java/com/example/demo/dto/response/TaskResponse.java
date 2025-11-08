@@ -11,5 +11,5 @@ public record TaskResponse (Long id,
                             String title,
                             String description,
                             Status status,
-                            Optional<UUID> userId){
+                            UUID userId){
 }

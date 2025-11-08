@@ -6,6 +6,9 @@ import com.example.demo.entity.Task;
 import com.example.demo.entity.User;
 import com.example.demo.enums.Status;
 
+import java.util.Optional;
+import java.util.UUID;
+
 public class TaskMapper {
 
     public static Task map(final TaskRequest request, User user){
@@ -18,21 +21,14 @@ public class TaskMapper {
     }
 
     public static TaskResponse toResponse(final Task task){
+        final UUID userId = task.getUser() != null ? task.getUser().getIdUser() : null;
         return new TaskResponse(
                 task.getId(),
                 task.getTitle(),
                 task.getDescription(),
                 task.getStatus(),
-                task.getUser().getIdUser()
+                userId
         );
     }
 
-    public static TaskResponse toCreateTaskResponse(final Task task){
-        return TaskResponse.builder()
-                .id(task.getId())
-                .title(task.getTitle())
-                .description(task.getDescription())
-                .status(task.getStatus())
-                .build();
-    }
 }

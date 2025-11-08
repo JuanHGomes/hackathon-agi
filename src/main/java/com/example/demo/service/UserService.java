@@ -78,7 +78,7 @@ public class UserService {
 
         try{
             return userRepository.findAll().stream()
-                    .map(registerMapper::toResponseDTO)
+                    .map(RegisterMapper::toResponseDTO)
                     .toList();
         }catch (Exception e){
             throw new RuntimeException("Erro interno ao listar usuário!", e);

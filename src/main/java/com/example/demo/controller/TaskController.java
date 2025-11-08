@@ -4,6 +4,7 @@ package com.example.demo.controller;
 import com.example.demo.dto.request.TaskRequest;
 import com.example.demo.dto.response.TaskResponse;
 import com.example.demo.entity.Task;
+import com.example.demo.enums.Status;
 import com.example.demo.mapper.TaskMapper;
 import com.example.demo.service.TaskService;
 import lombok.RequiredArgsConstructor;
@@ -43,7 +44,10 @@ public class TaskController {
         return taskService.listByUserAndStatusPending(userId).stream().map(TaskMapper::toResponse).toList();
     }
 
-
+    @PostMapping("/changeStatus/{idTask}")
+    public TaskResponse changeStats(@PathVariable Long idTask, @RequestParam String status){
+        return TaskMapper.toResponse(taskService.changeStatus(idTask, status));
+    }
 
 
 
