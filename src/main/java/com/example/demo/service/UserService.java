@@ -1,11 +1,13 @@
 package com.example.demo.service;
 
+import com.example.demo.dto.request.RegisterRequest;
+import com.example.demo.dto.response.RegisterResponse;
 import com.example.demo.entity.User;
 import com.example.demo.exception.BusinessException;
 import com.example.demo.exception.ResourceNotFoundException;
+import com.example.demo.mapper.RegisterMapper;
 import com.example.demo.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,6 +20,7 @@ import java.util.UUID;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final RegisterMapper registerMapper;
 
     private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
@@ -28,7 +31,7 @@ public class UserService {
                 });
     }
 
-    private void CheckEmailUnique(String email){
+    private void checkEmailUnique(String email){
 
         boolean emailExists = userRepository.findAll().stream()
                 .anyMatch(user -> user.getEmail().equals(email));
@@ -38,7 +41,24 @@ public class UserService {
     }
 
     @Transactional
-    public Re
+    public RegisterResponse createUser(RegisterRequest registerRequest) {
+
+        try{
+             checkEmailUnique(registerRequest.email());
+
+             User newUser = registerMapper.toEntity(registerRequest);
+
+             User userSave = userRepository.save(newUser);
+
+            RegisterResponse response = registerMapper.toResponseDTO(userSave);
+            return response;
+
+        } catch (BusinessException e) {
+            throw e;
+        }catch (Exception e){
+            throw new RuntimeException("Erro interno ao criar usuário", e);
+        }
+    }
 
 
 
