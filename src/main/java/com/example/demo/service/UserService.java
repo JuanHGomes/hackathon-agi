@@ -46,6 +46,7 @@ public class UserService {
         return userRepository.findById(id).orElseThrow();
 
     }
+
     @Transactional
     public RegisterResponse createUser(RegisterRequest registerRequest) {
 
