@@ -1,12 +1,11 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
-import org.hibernate.annotations.Comment;
 
 import java.time.LocalDateTime;
 
 @Entity
-public class HistoricoFerias {
+public class VacationHistory {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
@@ -21,7 +20,7 @@ public class HistoricoFerias {
     @JoinColumn(name = "currentUserId")
     private User currentUser;
 
-    @Column(nullable = false)
+    @OneToMany
     @JoinColumn(name = "taskId")
     private Task task;
 

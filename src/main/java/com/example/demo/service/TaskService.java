@@ -24,13 +24,14 @@ public class TaskService {
     private final TaskRepository taskRepository;
     private final UserService userService;
 
-    public TaskResponse create(TaskRequest request){
+    public TaskResponse create(TaskRequest request) {
 
         Task newTask = TaskMapper.map(request);
 
         taskRepository.save(newTask);
 
         return TaskMapper.toResponse(newTask);
+    }
 
 
     public void deleteTask(Long id){
