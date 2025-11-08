@@ -16,4 +16,6 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
 
     List<Task> findByUser_IdUser(UUID idUser);
 
+    List<Task> findTaskHistoryByUser(UUID userId);
+
 }
