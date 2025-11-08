@@ -86,12 +86,17 @@ public class TaskService {
         List<Task> tasks = listByUser(userId);
 
         return tasks.stream()
-                .filter(taskResponse -> taskResponse.getStatus() == Status.PENDENTE)
+                .filter(taskResponse -> taskResponse.getStatus() == Status.PENDENTE
+                        && taskResponse.getStatus() == Status.EM_ANDAMENTO)
                 .collect(Collectors.toList());
     }
 
     public List<Task> listEmAndamentoTasks(UUID userId){
         return taskRepository.buscarTasksPorUsuarioEStatus(userId, Status.EM_ANDAMENTO);
+    }
+
+    public List<Task> listConcluidoTasks(UUID userId){
+        return taskRepository.buscarTasksPorUsuarioEStatus(userId, Status.CONCLUIDO);
     }
 
     public void saveTask(Task task) {

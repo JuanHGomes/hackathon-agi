@@ -37,13 +37,11 @@ public class VacationHistoryService {
 
         List<Task> emAndamentoTasks = taskService.listEmAndamentoTasks(request.originUserId());
 
-        // Transfere as tarefas e salva as alterações
         emAndamentoTasks.forEach(task -> {
-            // Atualiza o dono da tarefa
+
             task.setUser(currentUser);
             taskService.saveTask(task);
 
-            // Cria registro de histórico de transferência
             vacationRepository.save(new VacationHistory(
                     originUser,
                     currentUser.getIdUser(),
@@ -76,11 +74,24 @@ public class VacationHistoryService {
 
     }
 
-//    public List<Task> findVacatioHistoryByUser(UUID userId){
-//
-//        vacationRepository.findAllByUser
-//
-//    }
+    @Scheduled(cron = "0 */2 * * * ?")
+    private void transferOwnershipForUpcomingVacations() {
+        LocalDate tomorrow = LocalDate.now().plusDays(1);
+        log.info("Iniciando transferência de titularidade para tarefas de férias que começam amanhã ({}).", tomorrow);
+
+
+        vacationRepository.findAllByInitDate(tomorrow)
+                .forEach(vacation -> {
+                    Task task = taskService.findTaskById(vacation.getTaskId());
+
+                    if (task.getStatus() == Status.EM_ANDAMENTO) {
+                        task.setUser(userService.findUserById(vacation.getCurrentUserId()));
+                        taskService.saveTask(task);
+                    }
+                });
+    }
+
+
 
 }
 

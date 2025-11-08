@@ -14,4 +14,6 @@ public interface VacationRepository extends JpaRepository<VacationHistory, Long>
     List<VacationHistory> findAllByEndDate(LocalDate localDate);
     @Query("SELECT v FROM VacationHistory v WHERE v.originUser.id = :originUserId")
     List<VacationHistory> findAllByOriginUser_Id(@Param("originUserId") UUID originUserId);
+
+    List<VacationHistory> findAllByInitDate(LocalDate date);
 }

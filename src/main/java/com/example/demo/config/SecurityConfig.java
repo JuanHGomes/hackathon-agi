@@ -34,6 +34,10 @@ public class SecurityConfig {
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
+                        // Rotas liberadas para o Swagger UI
+                        .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
+
+                        // Suas rotas existentes
                         .requestMatchers("/auth/**").permitAll()
                         .requestMatchers("/user/**").permitAll()
                         .requestMatchers("/tasks/create").hasAnyAuthority("ADMIN","MANAGER")
@@ -43,7 +47,6 @@ public class SecurityConfig {
                         .requestMatchers("task/listByUser/**").permitAll()
                         .requestMatchers("task/chanceStatus/**").permitAll()
                         .anyRequest().authenticated()
-
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
