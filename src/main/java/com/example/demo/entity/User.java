@@ -46,21 +46,9 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Task> taskList;
 
-//    // Usuário responsável atual dessas tarefas
-//    @OneToMany(mappedBy = "currentUser", cascade = CascadeType.ALL, orphanRemoval = true)
-//    private Set<Task> tasksResponsible = new HashSet<>();
-
     // Histórico de férias onde ele é o originador
     @OneToMany(mappedBy = "originUser", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<VacationHistory> vacationHistorySet = new HashSet<>();
-
-//    // Histórico de férias onde ele é o atual responsável
-//    @OneToMany(mappedBy = "currentUser", cascade = CascadeType.ALL, orphanRemoval = true)
-//    private Set<VacationHistory> vacationsCurrent = new HashSet<>();
-
-//    @OneToMany(mappedBy = "currentUser", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-//    @ToString.Exclude
-//    private final Set<Task> tasks = new HashSet<>();
 
 
     public void setName(String name) {
@@ -89,14 +77,5 @@ public class User implements UserDetails {
         return this.email;
     }
 
-//
-//    @Override
-//    public Collection<? extends GrantedAuthority> getAuthorities() {
-//        return role == null ? List.of() : List.of(new SimpleGrantedAuthority(role.name()));
-//    }
-//
-//    @Override
-//    public String getUsername() {
-//        return this.email;
-//    }
+
 }

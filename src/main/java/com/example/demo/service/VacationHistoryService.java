@@ -4,6 +4,7 @@ import com.example.demo.dto.request.VacationRequest;
 import com.example.demo.dto.response.VacationHistoryResponse;
 import com.example.demo.entity.Task;
 import com.example.demo.entity.User;
+import com.example.demo.entity.VacationHistory;
 import com.example.demo.mapper.VacationMapper;
 import com.example.demo.repository.VacationRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +22,7 @@ public class VacationHistoryService {
     private final UserService userService;
     private final VacationRepository vacationRepository;
 
-    public VacationHistoryResponse newVacationHistory(VacationRequest request){
+    public VacationHistory newVacationHistory(VacationRequest request){
 
         User originUser = userService.findUserById(request.originUserId());
         User currentUser = userService.findUserById(request.currentUserId());
@@ -30,9 +31,7 @@ public class VacationHistoryService {
 
         emAndamentoTasks.forEach(task -> task.setUser(currentUser));
 
-        return VacationMapper.toResponse(
-                vacationRepository.save(
-                        VacationMapper.map(request, originUser)));
+        return vacationRepository.save(VacationMapper.map(request, originUser));
 
     }
 
