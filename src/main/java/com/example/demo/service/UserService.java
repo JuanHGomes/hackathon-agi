@@ -60,6 +60,17 @@ public class UserService {
     }
 
 
+    public RegisterResponse findUserById(UUID idUser){
+        try{
+            User user = findUserOrThrow(idUser);
+
+            return registerMapper.toResponseDTO(user);
+        } catch (ResourceNotFoundException e){
+            throw e;
+        } catch (Exception e){
+            throw new RuntimeException("Erro interno ao buscar o usuário!", e);
+        }
+    }
 
 
 
