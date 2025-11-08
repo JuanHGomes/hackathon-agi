@@ -26,9 +26,9 @@ public class VacationHistoryService {
         User originUser = userService.findUserById(request.originUserId());
         User currentUser = userService.findUserById(request.currentUserId());
 
-        List<Task> pendingTasks = taskService.listByUserAndStatusPending(request.currentUserId());
+        List<Task> emAndamentoTasks = taskService.listEmAndamentoTasks(request.currentUserId());
 
-        pendingTasks.forEach(task -> task.setUser(currentUser));
+        emAndamentoTasks.forEach(task -> task.setUser(currentUser));
 
         return VacationMapper.toResponse(
                 vacationRepository.save(
