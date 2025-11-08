@@ -6,6 +6,7 @@ import com.example.demo.entity.Task;
 import com.example.demo.entity.User;
 import com.example.demo.entity.VacationHistory;
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,8 +27,14 @@ public class VacationHistoryService {
     pendingTasks.forEach(task -> task.setCurrentUser(newCurrentUser));
 
     return VacationHistory.builder()
-            .originUser(userService.findUserById(request.currentUserId())
-            .build()
+            .originUser(userService.findUserById(request.currentUserId()))
+            .currentUser(newCurrentUser)
+            .initDate(request.initDate())
+            .endDate(request.endDate())
+            .build();
 
     }
+
+
+
 }
