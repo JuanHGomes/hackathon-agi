@@ -56,9 +56,9 @@ public class TaskService {
     public TaskResponse takeTask(Long taskId, UUID userID){
         Task task = findTaskById(taskId);
 
-        User user = userService.findById(userID); //CAROL CRIA ESSE METODO EM NOME DE JESUS
+        User user = userService.findUserById(userID); //CAROL CRIA ESSE METODO EM NOME DE JESUS
 
-        task.setUser(user);
+        task.setCurrentUser(user);
 
         return TaskMapper.toResponse(taskRepository.save(task));
     }

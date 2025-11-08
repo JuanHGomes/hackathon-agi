@@ -1,12 +1,12 @@
 package com.example.demo.service;
 
 import com.example.demo.dto.request.VacationRequest;
-import com.example.demo.dto.response.TaskResponse;
+import com.example.demo.dto.response.VacationHistoryResponse;
 import com.example.demo.entity.Task;
 import com.example.demo.entity.User;
-import com.example.demo.entity.VacationHistory;
+import com.example.demo.mapper.VacationMapper;
+import com.example.demo.repository.VacationRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,24 +17,22 @@ public class VacationHistoryService {
 
     private final TaskService taskService;
     private final UserService userService;
+    private final VacationRepository vacationRepository;
 
-    public VacationHistory newVacationHistory(VacationRequest request){
+    public VacationHistoryResponse newVacationHistory(VacationRequest request){
 
-    User newCurrentUser = userService.findUserById(request.currentUserId());
+        User originUser = userService.findUserById(request.originUserId());
+        User currentUser = userService.findUserById(request.currentUserId());
 
-    List<Task> pendingTasks = taskService.listByUserAndStatusPending(request.currentUserId());
+        List<Task> pendingTasks = taskService.listByUserAndStatusPending(request.currentUserId());
 
-    pendingTasks.forEach(task -> task.setCurrentUser(newCurrentUser));
+        pendingTasks.forEach(task -> task.setCurrentUser(currentUser));
 
-    return VacationHistory.builder()
-            .originUser(userService.findUserById(request.currentUserId()))
-            .currentUser(newCurrentUser)
-            .initDate(request.initDate())
-            .endDate(request.endDate())
-            .build();
+        return VacationMapper.toResponse(
+                vacationRepository.save(
+                        VacationMapper.map(request, originUser, currentUser)));
 
     }
 
-
-
+    public
 }
