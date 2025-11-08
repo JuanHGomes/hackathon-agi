@@ -76,9 +76,7 @@ public class UserService {
     }
 
     public List<RegisterResponse> findAllUsers(User loggedUser) {
-
         try {
-
             if (loggedUser.getType() != Type.ADMIN && loggedUser.getType() != Type.MANAGER) {
                 throw new BusinessException("Acesso negado: apenas ADMIN e Gestores podem listar todos os usuários!");
             }
@@ -88,10 +86,39 @@ public class UserService {
                     .toList();
         } catch (Exception e) {
             throw new RuntimeException("Erro interno ao listar usuário!", e);
-
-
         }
-
-
+    }
+    
+    @Transactional
+    public User update(UUID id, User updatedUser) {
+        try {
+            User existingUser = findUserOrThrow(id);
+            
+            // Update the fields that are allowed to be updated
+            if (updatedUser.getName() != null) {
+                existingUser.setName(updatedUser.getName());
+            }
+            if (updatedUser.getEmail() != null && !updatedUser.getEmail().equals(existingUser.getEmail())) {
+                checkEmailUnique(updatedUser.getEmail());
+                existingUser.setEmail(updatedUser.getEmail());
+            }
+            if (updatedUser.getPassword() != null) {
+                existingUser.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
+            }
+            if (updatedUser.getType() != null) {
+                existingUser.setType(updatedUser.getType());
+            }
+            
+            return userRepository.save(existingUser);
+            
+        } catch (BusinessException | ResourceNotFoundException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao atualizar usuário", e);
+        }
+    }
+    
+    public User findById(UUID id) {
+        return findUserOrThrow(id);
     }
 }
