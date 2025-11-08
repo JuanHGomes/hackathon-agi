@@ -9,7 +9,6 @@ import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.mapper.RegisterMapper;
 import com.example.demo.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,7 +34,6 @@ public class UserService {
     }
 
     private void checkEmailUnique(String email) {
-
         boolean emailExists = userRepository.findAll().stream()
                 .anyMatch(user -> user.getEmail().equals(email));
         if (emailExists) {
@@ -45,7 +43,6 @@ public class UserService {
 
     @Transactional
     public RegisterResponse createUser(RegisterRequest registerRequest) {
-
         try {
             checkEmailUnique(registerRequest.email());
 
@@ -62,10 +59,8 @@ public class UserService {
         }
     }
 
-
     public User findUserById(UUID idUser) {
         try {
-
             return findUserOrThrow(idUser);
         } catch (ResourceNotFoundException e) {
             throw e;
@@ -75,7 +70,6 @@ public class UserService {
     }
 
     public List<RegisterResponse> findAllUsers() {
-
         try {
             return userRepository.findAll().stream()
                     .map(RegisterMapper::toResponseDTO)
@@ -83,7 +77,6 @@ public class UserService {
         } catch (Exception e) {
             throw new RuntimeException("Erro interno ao listar usuário!", e);
         }
-
     }
 
     public User update(UUID id, User updateUser) {
@@ -105,7 +98,26 @@ public class UserService {
         if (updateUser.getRole() != null) {
             existingUser.setRole(updateUser.getRole());
         }
+
+        //  Se vier valor de ativação, atualiza também
+        existingUser.setActive(updateUser.isActive());
+
         return userRepository.save(existingUser);
     }
-}
 
+    //  Novo método para inativar usuário
+    @Transactional
+    public void deactivateUser(UUID idUser) {
+        User user = findUserOrThrow(idUser);
+        user.setActive(false);
+        userRepository.save(user);
+    }
+
+    //  Novo método para ativar usuário
+    @Transactional
+    public void activateUser(UUID idUser) {
+        User user = findUserOrThrow(idUser);
+        user.setActive(true);
+        userRepository.save(user);
+    }
+}

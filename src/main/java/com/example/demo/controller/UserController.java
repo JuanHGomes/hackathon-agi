@@ -23,24 +23,18 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<RegisterResponse> createUser(@RequestBody @Valid RegisterRequest request){
-
         RegisterResponse createdUser = userService.createUser(request);
-
         return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
     }
 
-
     @GetMapping("/{id}")
     public ResponseEntity<RegisterResponse> findUserById(@PathVariable UUID idUser){
-
         RegisterResponse response = RegisterMapper.toResponseDTO(userService.findUserById(idUser));
-
         return ResponseEntity.ok(response);
     }
 
     @GetMapping
     public ResponseEntity<List<RegisterResponse>> findAllUsers(){
-
         return ResponseEntity.ok(userService.findAllUsers());
     }
 
@@ -50,9 +44,8 @@ public class UserController {
             @RequestParam UUID requesterId,
             @RequestBody User updatedData) {
 
-        User requester = userService.findUserById(id);
+        User requester = userService.findUserById(requesterId); // 👈 Corrigido: era id, agora requesterId
         User target = userService.findUserById(id);
-
 
         if (requester.getRole() == Role.ADMIN) {
             User updated = userService.update(id, updatedData);
@@ -69,7 +62,6 @@ public class UserController {
             }
         }
 
-
         if (requester.getRole() == Role.EMPLOYEE) {
             if (!requester.getIdUser().equals(id)) {
                 return ResponseEntity.status(403)
@@ -80,5 +72,37 @@ public class UserController {
         }
 
         return ResponseEntity.status(403).body("Acesso negado!");
+    }
+
+    // 👇 Novo endpoint para inativar usuário (somente ADMIN pode)
+    @PutMapping("/{id}/deactivate")
+    public ResponseEntity<?> deactivateUser(
+            @PathVariable UUID id,
+            @RequestParam UUID requesterId) {
+
+        User requester = userService.findUserById(requesterId);
+
+        if (requester.getRole() != Role.ADMIN) {
+            return ResponseEntity.status(403).body("Apenas ADMIN pode inativar usuários.");
+        }
+
+        userService.deactivateUser(id);
+        return ResponseEntity.ok("Usuário inativado com sucesso.");
+    }
+
+    //  Novo endpoint para ativar usuário (somente ADMIN pode)
+    @PutMapping("/{id}/activate")
+    public ResponseEntity<?> activateUser(
+            @PathVariable UUID id,
+            @RequestParam UUID requesterId) {
+
+        User requester = userService.findUserById(requesterId);
+
+        if (requester.getRole() != Role.ADMIN) {
+            return ResponseEntity.status(403).body("Apenas ADMIN pode ativar usuários.");
+        }
+
+        userService.activateUser(id);
+        return ResponseEntity.ok("Usuário ativado com sucesso.");
     }
 }
