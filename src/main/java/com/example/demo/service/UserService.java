@@ -80,7 +80,7 @@ public class UserService {
         try {
 
             if (loggedUser.getType() != Type.ADMIN && loggedUser.getType() != Type.MANAGER) {
-                throw new BusinessException("Acesso negado: apenas ADMIN e Gestores podem listar todos os usuários!")
+                throw new BusinessException("Acesso negado: apenas ADMIN e Gestores podem listar todos os usuários!");
             }
 
             return userRepository.findAll().stream()
