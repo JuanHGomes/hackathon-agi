@@ -13,7 +13,7 @@ public class RegisterMapper {
                 user.getIdUser(),
                 user.getName(),
                 user.getEmail(),
-                user.getType()
+                user.getRole()
         );
     }
 
@@ -21,14 +21,14 @@ public class RegisterMapper {
         User user = new User();
         user.setName(registerRequest.name());
         user.setEmail(registerRequest.email());
-        user.setType(registerRequest.type());
+        user.setRole(registerRequest.role());
         user.setPassword(registerRequest.password());
         return user;
     }
 
     public void updateEntityFromDto(RegisterRequest registerRequest, User user){
         user.setPassword(registerRequest.password());
-        user.setType(registerRequest.type());
+        user.setRole(registerRequest.role());
         user.setName(registerRequest.name());
         user.setEmail(registerRequest.email());
     }

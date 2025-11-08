@@ -1,6 +1,6 @@
 package com.example.demo.dto.request;
 
-import com.example.demo.enums.Type;
+import com.example.demo.enums.Role;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -18,7 +18,7 @@ public record RegisterRequest(
         String password,
 
         @NotNull(message = "O perfil do usuário é obrigatório!")
-        Type type
+        Role role
 
 ) {
 }

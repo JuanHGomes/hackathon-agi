@@ -90,7 +90,7 @@ public class TaskService {
     }
 
     public List<Task> listEmAndamentoTasks(UUID userId){
-        taskRepository.findAllByStatus(Status.EM_ANDAMENTO);
+        return taskRepository.buscarTasksPorUsuarioEStatus(userId, Status.EM_ANDAMENTO);
     }
 
 

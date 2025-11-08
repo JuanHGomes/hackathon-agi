@@ -8,16 +8,17 @@ import com.example.demo.service.UserService;
 import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @RequiredArgsConstructor
 public class VacationMapper {
 
     private final UserService userService;
 
-    public static VacationHistory map (final VacationRequest request, User originUser, User currentUser){
+    public static VacationHistory map (final VacationRequest request, User originUser){
         return VacationHistory.builder()
                 .originUser(originUser)
-                .currentUser(currentUser)
+                .currentUserId(request.currentUserId())
                 .initDate(request.initDate())
                 .endDate(request.endDate())
                 .build();
@@ -26,7 +27,7 @@ public class VacationMapper {
     public static VacationHistoryResponse toResponse(final VacationHistory vacationHistory){
         return new VacationHistoryResponse(
                 vacationHistory.getId(),
-                vacationHistory.getCurrentUser().getIdUser(),
+                vacationHistory.getCurrentUserId(),
                 vacationHistory.getOriginUser().getIdUser(),
                 vacationHistory.getInitDate().toString(),
                 vacationHistory.getEndDate().toString()

@@ -28,11 +28,11 @@ public class VacationHistoryService {
 
         List<Task> pendingTasks = taskService.listByUserAndStatusPending(request.currentUserId());
 
-        pendingTasks.forEach(task -> task.setCurrentUser(currentUser));
+        pendingTasks.forEach(task -> task.setUser(currentUser));
 
         return VacationMapper.toResponse(
                 vacationRepository.save(
-                        VacationMapper.map(request, originUser, currentUser)));
+                        VacationMapper.map(request, originUser)));
 
     }
 

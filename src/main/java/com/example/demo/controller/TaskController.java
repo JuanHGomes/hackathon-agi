@@ -28,9 +28,9 @@ public class TaskController {
     }
 
     @PostMapping("/setUser/{idUser}/{idTask}")
-    public ResponseEntity<Task> createTask (@PathVariable UUID idUser, @PathVariable Long idTask){
+    public ResponseEntity<TaskResponse> createTask (@PathVariable UUID idUser, @PathVariable Long idTask){
 
-        return ResponseEntity.ok(taskService.setTaskUser(idTask, idUser));
+        return ResponseEntity.ok(TaskMapper.toResponse(taskService.setTaskUser(idTask, idUser)));
     }
 
     @GetMapping()
@@ -49,7 +49,10 @@ public class TaskController {
         return TaskMapper.toResponse(taskService.changeStatus(idTask, status));
     }
 
-
+    @GetMapping("/tasksByUserEmAndamento/{userId}")
+    public List<TaskResponse> tasksByUserSatausEmAndamento(@PathVariable UUID userId){
+        return taskService.listEmAndamentoTasks(userId).stream().map(TaskMapper::toResponse).toList();
+    }
 
 
 }
