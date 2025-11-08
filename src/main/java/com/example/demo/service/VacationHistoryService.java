@@ -8,14 +8,19 @@ import com.example.demo.entity.VacationHistory;
 import com.example.demo.mapper.VacationMapper;
 import com.example.demo.repository.VacationRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
+@EnableScheduling
 public class VacationHistoryService {
 
     private final String SCHEDULED_CHANGE_USER_OF_ENDED_VACATION = "0 0 0 * * ?";
@@ -37,14 +42,40 @@ public class VacationHistoryService {
 
     }
 
-    @Scheduled(cron = SCHEDULED_CHANGE_USER_OF_ENDED_VACATION)
+    @Scheduled(cron = "* * * * * *")
     public void changeUserOfEndedVacation(){
 
-        vacationRepository.findAllByEndDate(LocalDate.now())
-                .stream().forEach(vacation -> taskService
-                        .findTaskById(vacation.getTaskId())
-                        .setUser(userService.findUserById(vacation.getOriginUser().getIdUser())));
+        log.info("Iniciando reatribuição de tarefas de férias finalizadas.");
 
+
+        vacationRepository.findAllByEndDate(LocalDate.now())
+                .forEach(vacation -> {
+
+
+                    User originUser = vacation.getOriginUser();
+
+
+                    UUID currentUserId = vacation.getCurrentUserId();
+
+                    List<Task> emAndamentoTasks = taskService.listEmAndamentoTasks(currentUserId);
+
+                    if (!emAndamentoTasks.isEmpty()) {
+                        log.info("Reatribuindo {} tarefas do usuário ID {} para o usuário ID {}",
+                                emAndamentoTasks.size(), currentUserId, originUser.getIdUser());
+
+                        emAndamentoTasks.forEach(task -> {
+                            task.setUser(originUser);
+
+                            taskService.saveTask(task);
+                        });
+                    } else {
+                        log.info("Nenhuma tarefa em andamento encontrada para reatribuição do usuário ID {}", currentUserId);
+                    }
+                });
+
+        log.info("Reatribuição de tarefas concluída.");
     }
 
 }
+
+

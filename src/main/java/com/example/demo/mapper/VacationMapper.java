@@ -27,8 +27,8 @@ public class VacationMapper {
     public static VacationHistoryResponse toResponse(final VacationHistory vacationHistory){
         return new VacationHistoryResponse(
                 vacationHistory.getId(),
-                vacationHistory.getCurrentUserId(),
                 vacationHistory.getOriginUser().getIdUser(),
+                vacationHistory.getCurrentUserId(),
                 vacationHistory.getInitDate().toString(),
                 vacationHistory.getEndDate().toString()
         );

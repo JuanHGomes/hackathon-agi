@@ -3,7 +3,7 @@ package com.example.demo.controller;
 import com.example.demo.dto.request.RegisterRequest;
 import com.example.demo.dto.response.RegisterResponse;
 import com.example.demo.entity.User;
-import com.example.demo.enums.Type;
+import com.example.demo.enums.Role;
 import com.example.demo.mapper.RegisterMapper;
 import com.example.demo.service.UserService;
 import jakarta.validation.Valid;
@@ -54,13 +54,13 @@ public class UserController {
         User target = userService.findUserById(id);
 
 
-        if (requester.getType() == Type.ADMIN) {
+        if (requester.getRole() == Role.ADMIN) {
             User updated = userService.update(id, updatedData);
             return ResponseEntity.ok(updated);
         }
 
-        if (requester.getType() == Type.MANAGER) {
-            if (target.getType() == Type.EMPLOYEE) {
+        if (requester.getRole() == Role.MANAGER) {
+            if (target.getRole() == Role.EMPLOYEE) {
                 User updated = userService.update(id, updatedData);
                 return ResponseEntity.ok(updated);
             } else {
@@ -70,7 +70,7 @@ public class UserController {
         }
 
 
-        if (requester.getType() == Type.EMPLOYEE) {
+        if (requester.getRole() == Role.EMPLOYEE) {
             if (!requester.getIdUser().equals(id)) {
                 return ResponseEntity.status(403)
                         .body("Você só pode atualizar o seu próprio perfil!");
