@@ -39,13 +39,14 @@ public class SecurityConfig {
 
                         // Suas rotas existentes
                         .requestMatchers("/auth/**").permitAll()
-                        .requestMatchers("/user/**").permitAll()
+                        .requestMatchers("/user/**").hasAuthority("ADMIN")
                         .requestMatchers("/tasks/create").hasAnyAuthority("ADMIN","MANAGER")
                         .requestMatchers("task/setUser/**").hasAnyAuthority("ADMIN","MANAGER")
                         .requestMatchers("task/listAll").hasAnyAuthority("ADMIN","MANAGER")
                         .requestMatchers("task/historico/**").permitAll()
                         .requestMatchers("task/listByUser/**").permitAll()
                         .requestMatchers("task/chanceStatus/**").permitAll()
+                        .requestMatchers("/api/vacations/transfers").permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
