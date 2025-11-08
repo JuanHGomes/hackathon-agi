@@ -9,7 +9,7 @@ import com.example.demo.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
+import org.springframework.web.bind.annotation.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -30,22 +30,8 @@ import java.util.UUID;
 public class UserController {
     private final UserService userService;
 
-    @Operation(
-            summary = "Cria um novo usuário",
-            description = "Cria um usuário e atribui sua role inicial.",
-            responses = {
-                    @ApiResponse(
-                            responseCode = "201",
-                            description = "Usuário criado com sucesso.",
-                            content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(implementation = RegisterResponse.class))),
-                    @ApiResponse(
-                            responseCode = "400",
-                            description = "Dados inválidos fornecidos no corpo da requisição.")
-            }
-    )
     @PostMapping
-    public ResponseEntity<RegisterResponse> createUser(@RequestBody @Valid RegisterRequest request){
+    public ResponseEntity<RegisterResponse> createUser(@RequestBody RegisterRequest request){
 
         RegisterResponse createdUser = userService.createUser(request);
 

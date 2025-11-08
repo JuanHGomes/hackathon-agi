@@ -54,42 +54,42 @@ public class VacationHistoryService {
         return emAndamentoTasks;
     }
 
-    @Scheduled(cron = "* * * * * *")
-    public void changeUserOfEndedVacation(){
-
-        log.info("Iniciando reatribuição de tarefas de férias finalizadas.");
-
-
-        vacationRepository.findAllByEndDate(LocalDate.now())
-                .forEach(vacation -> {
-
-                   Task task = taskService.findTaskById(vacation.getTaskId());
-
-                        if(task.getStatus() == Status.EM_ANDAMENTO){
-                            task.setUser(vacation.getOriginUser());
-                            taskService.saveTask(task);
-                        }
-                    });
-
-
-    }
-
-    @Scheduled(cron = "0 */2 * * * ?")
-    private void transferOwnershipForUpcomingVacations() {
-        LocalDate tomorrow = LocalDate.now().plusDays(1);
-        log.info("Iniciando transferência de titularidade para tarefas de férias que começam amanhã ({}).", tomorrow);
-
-
-        vacationRepository.findAllByInitDate(tomorrow)
-                .forEach(vacation -> {
-                    Task task = taskService.findTaskById(vacation.getTaskId());
-
-                    if (task.getStatus() == Status.EM_ANDAMENTO) {
-                        task.setUser(userService.findUserById(vacation.getCurrentUserId()));
-                        taskService.saveTask(task);
-                    }
-                });
-    }
+//    @Scheduled(cron = "* * * * * *")
+//    public void changeUserOfEndedVacation(){
+//
+//        log.info("Iniciando reatribuição de tarefas de férias finalizadas.");
+//
+//
+//        vacationRepository.findAllByEndDate(LocalDate.now())
+//                .forEach(vacation -> {
+//
+//                   Task task = taskService.findTaskById(vacation.getTaskId());
+//
+//                        if(task.getStatus() == Status.EM_ANDAMENTO){
+//                            task.setUser(vacation.getOriginUser());
+//                            taskService.saveTask(task);
+//                        }
+//                    });
+//
+//
+//    }
+//
+//    @Scheduled(cron = "0 */2 * * * ?")
+//    private void transferOwnershipForUpcomingVacations() {
+//        LocalDate tomorrow = LocalDate.now().plusDays(1);
+//        log.info("Iniciando transferência de titularidade para tarefas de férias que começam amanhã ({}).", tomorrow);
+//
+//
+//        vacationRepository.findAllByInitDate(tomorrow)
+//                .forEach(vacation -> {
+//                    Task task = taskService.findTaskById(vacation.getTaskId());
+//
+//                    if (task.getStatus() == Status.EM_ANDAMENTO) {
+//                        task.setUser(userService.findUserById(vacation.getCurrentUserId()));
+//                        taskService.saveTask(task);
+//                    }
+//                });
+//    }
 
 
 
