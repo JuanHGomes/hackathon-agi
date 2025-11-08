@@ -33,6 +33,4 @@ public class VacationHistoryService {
                         VacationMapper.map(request, originUser, currentUser)));
 
     }
-
-    public
 }
