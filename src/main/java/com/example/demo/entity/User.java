@@ -6,9 +6,6 @@ import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-//import org.springframework.security.core.GrantedAuthority;
-//import org.springframework.security.core.authority.SimpleGrantedAuthority;
-//import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.*;
 
@@ -50,6 +47,9 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "originUser", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<VacationHistory> vacationHistorySet = new HashSet<>();
 
+    //  Adicionado para controle de ativação/inativação do usuário
+    @Column(nullable = false)
+    private boolean active = true;
 
     public void setName(String name) {
         this.name = name;
@@ -67,6 +67,12 @@ public class User implements UserDetails {
         this.role = role;
     }
 
+    //  Método sobrescrito para refletir o status de ativação
+    @Override
+    public boolean isEnabled() {
+        return this.active;
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return role == null ? List.of() : List.of(new SimpleGrantedAuthority((role.name())));
@@ -77,5 +83,23 @@ public class User implements UserDetails {
         return this.email;
     }
 
+    @Override
+    public String getPassword() {
+        return this.password;
+    }
 
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
 }
