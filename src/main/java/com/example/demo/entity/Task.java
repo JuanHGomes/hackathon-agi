@@ -25,8 +25,12 @@ public class Task {
     private Status status;
 
     @ManyToOne
-    @JoinColumn(name = "userId")
-    private User user;
+    @JoinColumn(name = "originUserId")
+    private User originUser;
+
+    @ManyToOne
+    @JoinColumn(name = "currentUserId")
+    private User currentUser;
 
     @Column(nullable = false, columnDefinition = "boolean default false")
     private boolean deleted = false;

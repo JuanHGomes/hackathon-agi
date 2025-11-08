@@ -84,13 +84,12 @@ public class TaskService {
                 .collect(Collectors.toList());
     }
 
-    public List<TaskResponse> listByUserAndStatusPending(UUID userId){
+    public List<Task> listByUserAndStatusPending(UUID userId){
 
         List<Task> tasks = taskRepository.findByUser_IdUser(userId);
 
         return tasks.stream()
-                .map(TaskMapper::toResponse)
-                .filter(taskResponse -> taskResponse.status() == Status.PENDENTE)
+                .filter(taskResponse -> taskResponse.getStatus() == Status.PENDENTE)
                 .collect(Collectors.toList());
     }
 

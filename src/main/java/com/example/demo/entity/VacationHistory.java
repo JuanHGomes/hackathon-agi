@@ -1,10 +1,12 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 
 import java.time.LocalDateTime;
 
 @Entity
+@Builder
 public class VacationHistory {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
