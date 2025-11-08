@@ -12,6 +12,9 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import java.util.UUID;
 
 @Service
@@ -56,4 +59,12 @@ public class TaskService {
         return taskRepository.findById(id).orElseThrow(RuntimeException::new);
 
     }
+
+    public List<TaskResponse> listAll(){
+        List<Task> tasks = taskRepository.findAll();
+        return tasks.stream()
+                .map(TaskMapper::toResponse)
+                .collect(Collectors.toList());
+    }
+
 }
