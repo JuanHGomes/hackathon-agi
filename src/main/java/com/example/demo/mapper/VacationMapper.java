@@ -27,10 +27,11 @@ public class VacationMapper {
     public static VacationHistoryResponse toResponse(final VacationHistory vacationHistory){
         return new VacationHistoryResponse(
                 vacationHistory.getId(),
-                vacationHistory.getOriginUser().getIdUser(),
                 vacationHistory.getCurrentUserId(),
-                vacationHistory.getInitDate().toString(),
-                vacationHistory.getEndDate().toString()
+                vacationHistory.getOriginUser().getIdUser(),
+                vacationHistory.getTaskId(),
+                vacationHistory.getInitDate(),
+                vacationHistory.getEndDate()
         );
     }
 }

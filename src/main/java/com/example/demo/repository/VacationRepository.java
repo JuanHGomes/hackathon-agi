@@ -16,4 +16,6 @@ public interface VacationRepository extends JpaRepository<VacationHistory, Long>
     List<VacationHistory> findAllByOriginUser_Id(@Param("originUserId") UUID originUserId);
 
     List<VacationHistory> findAllByInitDate(LocalDate date);
+
+
 }
