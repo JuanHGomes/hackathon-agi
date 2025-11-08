@@ -70,7 +70,7 @@ public class TaskService {
     }
 
     public List<TaskResponse> listAll(){
-        List<Task> tasks = taskRepository.findAll();
+        List<Task> tasks = taskRepository.findByDeletedFalse();
         return tasks.stream()
                 .map(TaskMapper::toResponse)
                 .collect(Collectors.toList());
