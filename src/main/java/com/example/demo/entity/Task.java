@@ -27,4 +27,7 @@ public class Task {
     @ManyToOne
     @JoinColumn(name = "userId")
     private User user;
+
+    @Column(nullable = false, columnDefinition = "boolean default false")
+    private boolean deleted = false;
 }
