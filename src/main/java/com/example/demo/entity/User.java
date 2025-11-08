@@ -70,11 +70,4 @@ public class User {
     }
 
 
-    public void assignUserToTaks(Task task){
-        if (task != null) {
-            this.tasks.add(task);
-            System.out.println("Tarefa " + task.getTitle() + " associada ao usuário '" + name + "'");
-        }
-    }
-
 }
