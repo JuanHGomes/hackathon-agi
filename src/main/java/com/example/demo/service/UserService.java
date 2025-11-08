@@ -42,12 +42,6 @@ public class UserService {
         }
     }
 
-    public User findUserById(UUID id){
-
-        return userRepository.findById(id).orElseThrow();
-
-    }
-
     @Transactional
     public RegisterResponse createUser(RegisterRequest registerRequest) {
 
