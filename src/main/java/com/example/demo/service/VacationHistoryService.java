@@ -29,7 +29,7 @@ public class VacationHistoryService {
     private final UserService userService;
     private final VacationRepository vacationRepository;
 
-    public VacationHistory newVacationHistory(VacationRequest request){
+    public List<Task> newVacationHistory(VacationRequest request){
 
         User originUser = userService.findUserById(request.originUserId());
         User currentUser = userService.findUserById(request.currentUserId());
@@ -37,8 +37,15 @@ public class VacationHistoryService {
         List<Task> emAndamentoTasks = taskService.listEmAndamentoTasks(request.currentUserId());
 
         emAndamentoTasks.forEach(task -> task.setUser(currentUser));
+        emAndamentoTasks.forEach(task -> {
+            vacationRepository.save(new VacationHistory(originUser,
+                    currentUser.getIdUser(),
+                    task.getId(),
+                    request.initDate(),
+                    request.endDate()));
+        });
 
-        return vacationRepository.save(VacationMapper.map(request, originUser));
+        return emAndamentoTasks;
 
     }
 
@@ -75,6 +82,12 @@ public class VacationHistoryService {
 
         log.info("Reatribuição de tarefas concluída.");
     }
+
+//    public List<Task> findVacatioHistoryByUser(UUID userId){
+//
+//        vacationRepository.findAllByUser
+//
+//    }
 
 }
 

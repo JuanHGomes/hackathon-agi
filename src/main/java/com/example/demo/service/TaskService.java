@@ -93,9 +93,9 @@ public class TaskService {
         return taskRepository.buscarTasksPorUsuarioEStatus(userId, Status.EM_ANDAMENTO);
     }
 
-    public List<Task> getUserTaskHistory(UUID userId) {
-        return taskRepository.findTaskHistoryByUser(userId);
-    }
+//    public List<Task> getUserTaskHistory(UUID userId) {
+//        return taskRepository.findTaskHistoryByUser(userId);
+//    }
 
 
 

@@ -34,4 +34,11 @@ public class VacationHistory {
     private LocalDate endDate;
 
 
+    public VacationHistory(User originUser, UUID currentUserId, Long taskId, LocalDate initDate, LocalDate endDate) {
+        this.originUser = originUser;
+        this.currentUserId = currentUserId;
+        this.taskId = taskId;
+        this.initDate = initDate;
+        this.endDate = endDate;
+    }
 }

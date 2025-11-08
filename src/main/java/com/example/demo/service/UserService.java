@@ -50,7 +50,7 @@ public class UserService {
             checkEmailUnique(registerRequest.email());
 
             User newUser = registerMapper.toEntity(registerRequest);
-
+            newUser.setPassword(passwordEncoder.encode(registerRequest.password()));
             User userSave = userRepository.save(newUser);
 
             return registerMapper.toResponseDTO(userSave);

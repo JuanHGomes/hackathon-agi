@@ -35,8 +35,14 @@ public class SecurityConfig {
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/**").permitAll()
-                        .requestMatchers("/user/**").hasAuthority("MANAGER")
-                        .anyRequest().permitAll()
+                        .requestMatchers("/user/**").permitAll()
+                        .requestMatchers("/tasks/create").hasAnyAuthority("ADMIN","MANAGER")
+                        .requestMatchers("task/setUser/**").hasAnyAuthority("ADMIN","MANAGER")
+                        .requestMatchers("task/listAll").hasAnyAuthority("ADMIN","MANAGER")
+                        .requestMatchers("task/historico/**").permitAll()
+                        .requestMatchers("task/listByUser/**").permitAll()
+                        .requestMatchers("task/chanceStatus/**").permitAll()
+                        .anyRequest().authenticated()
 
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
