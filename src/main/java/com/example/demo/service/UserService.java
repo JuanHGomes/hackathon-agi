@@ -3,6 +3,7 @@ package com.example.demo.service;
 import com.example.demo.dto.request.RegisterRequest;
 import com.example.demo.dto.response.RegisterResponse;
 import com.example.demo.entity.User;
+import com.example.demo.enums.Type;
 import com.example.demo.exception.BusinessException;
 import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.mapper.RegisterMapper;
@@ -71,7 +72,6 @@ public class UserService {
             throw new RuntimeException("Erro interno ao buscar o usuário!", e);
         }
     }
-
 
 
 }
