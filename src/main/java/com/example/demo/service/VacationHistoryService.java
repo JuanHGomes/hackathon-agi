@@ -7,8 +7,10 @@ import com.example.demo.entity.User;
 import com.example.demo.mapper.VacationMapper;
 import com.example.demo.repository.VacationRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -34,5 +36,10 @@ public class VacationHistoryService {
 
     }
 
-    public
+    @Scheduled(cron = "0 0 0 * * ?")
+    public void changeUserOfEndedVacation(){
+
+        vacationRepository.findAllByEndDate(LocalDate.now());
+    }
+
 }

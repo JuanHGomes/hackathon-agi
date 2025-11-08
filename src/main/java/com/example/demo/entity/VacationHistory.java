@@ -3,6 +3,7 @@ package com.example.demo.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -32,10 +33,10 @@ public class VacationHistory {
     private Task task;
 
     @Column(nullable = false)
-    private LocalDateTime initDate;
+    private LocalDate initDate;
 
     @Column(nullable = false)
-    private LocalDateTime endDate;
+    private LocalDate endDate;
 
 
 }
