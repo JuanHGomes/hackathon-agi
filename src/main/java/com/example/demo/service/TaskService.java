@@ -25,5 +25,13 @@ public class TaskService {
 
         return TaskMapper.toResponse(newTask);
 
+
+    public void deleteTask(Long id){
+        Task task = taskRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Tarefa não encontrada"));
+
+        task.setDeleted(true);
+
+        taskRepository.save(task);
     }
 }
