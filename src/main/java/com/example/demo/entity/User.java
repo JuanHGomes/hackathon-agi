@@ -40,8 +40,8 @@ public class User implements UserDetails {
     private Role role;
 
     // Usuário criou essas tarefas
-    @OneToMany(mappedBy = "originUser", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Task> tasksCreated = new HashSet<>();
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Task> taskList;
 
 //    // Usuário responsável atual dessas tarefas
 //    @OneToMany(mappedBy = "currentUser", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -49,7 +49,7 @@ public class User implements UserDetails {
 
     // Histórico de férias onde ele é o originador
     @OneToMany(mappedBy = "originUser", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<VacationHistory> vacationsOrigin = new HashSet<>();
+    private Set<VacationHistory> vacationHistorySet = new HashSet<>();
 
 //    // Histórico de férias onde ele é o atual responsável
 //    @OneToMany(mappedBy = "currentUser", cascade = CascadeType.ALL, orphanRemoval = true)

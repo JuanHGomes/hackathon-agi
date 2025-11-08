@@ -21,20 +21,20 @@ public class VacationHistoryService {
     private final UserService userService;
     private final VacationRepository vacationRepository;
 
-//    public VacationHistoryResponse newVacationHistory(VacationRequest request){
-//
-//        User originUser = userService.findUserById(request.originUserId());
-//        User currentUser = userService.findUserById(request.currentUserId());
-//
-//        List<Task> pendingTasks = taskService.listByUserAndStatusPending(request.currentUserId());
-//
-//        pendingTasks.forEach(task -> task.setCurrentUser(currentUser));
-//
-//        return VacationMapper.toResponse(
-//                vacationRepository.save(
-//                        VacationMapper.map(request, originUser, currentUser)));
-//
-//    }
+    public VacationHistoryResponse newVacationHistory(VacationRequest request){
+
+        User originUser = userService.findUserById(request.originUserId());
+        User currentUser = userService.findUserById(request.currentUserId());
+
+        List<Task> pendingTasks = taskService.listByUserAndStatusPending(request.currentUserId());
+
+        pendingTasks.forEach(task -> task.setCurrentUser(currentUser));
+
+        return VacationMapper.toResponse(
+                vacationRepository.save(
+                        VacationMapper.map(request, originUser, currentUser)));
+
+    }
 
     @Scheduled(cron = "0 0 0 * * ?")
     public void changeUserOfEndedVacation(){

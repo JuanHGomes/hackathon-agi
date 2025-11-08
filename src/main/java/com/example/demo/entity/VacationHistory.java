@@ -5,6 +5,7 @@ import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @Table(name = "tb_vacation_history")
@@ -22,13 +23,9 @@ public class VacationHistory {
     @JoinColumn(name = "originUserId")
     private User originUser;
 
-    @ManyToOne
-    @JoinColumn(name = "currentUserId")
-    private User currentUser;
+    private UUID currentUserId;
 
-    @ManyToOne
-    @JoinColumn(name = "taskId")
-    private Task task;
+    private Long taskId;
 
     @Column(nullable = false)
     private LocalDate initDate;

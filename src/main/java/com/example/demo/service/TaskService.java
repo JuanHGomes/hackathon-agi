@@ -1,22 +1,17 @@
 package com.example.demo.service;
 
 import com.example.demo.dto.request.TaskRequest;
-import com.example.demo.dto.response.RegisterResponse;
-import com.example.demo.dto.response.TaskResponse;
+
 
 import com.example.demo.entity.Task;
 import com.example.demo.entity.User;
 import com.example.demo.enums.Status;
-import com.example.demo.enums.Type;
-import com.example.demo.mapper.TaskMapper;
 import com.example.demo.repository.TaskRepository;
 import lombok.RequiredArgsConstructor;
 
-import org.hibernate.query.sql.internal.ParameterRecognizerImpl;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import java.util.UUID;
@@ -92,6 +87,10 @@ public class TaskService {
         return tasks.stream()
                 .filter(taskResponse -> taskResponse.getStatus() == Status.PENDENTE)
                 .collect(Collectors.toList());
+    }
+
+    public List<Task> listEmAndamentoTasks(UUID userId){
+        taskRepository.findAllByStatus(Status.EM_ANDAMENTO);
     }
 
 
