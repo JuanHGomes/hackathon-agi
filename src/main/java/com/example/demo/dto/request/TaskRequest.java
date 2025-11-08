@@ -1,9 +1,10 @@
 package com.example.demo.dto.request;
 
+import jakarta.validation.constraints.NotEmpty;
+
 public record TaskRequest(
-String title,
+@NotEmpty String title,
 String description,
-String status,
 Long userId
 ) {
 }
